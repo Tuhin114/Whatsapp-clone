@@ -12,3 +12,4 @@
 ### Authentication via clerk with convex
 
 - Follow process in the video.
+- Users function with schema.

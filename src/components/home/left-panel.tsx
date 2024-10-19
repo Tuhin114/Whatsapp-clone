@@ -1,4 +1,4 @@
-import { ListFilter, LogOut, MessageSquareDiff, Search } from "lucide-react";
+import { ListFilter, MessageSquareDiff, Search } from "lucide-react";
 import { Input } from "../ui/input";
 import ThemeSwitch from "./theme-switch";
 import { conversations } from "../dummy-data/db";
@@ -17,7 +17,6 @@ const LeftPanel = () => {
             <MessageSquareDiff size={20} />{" "}
             {/* TODO: This line will be replaced with <UserListDialog /> */}
             <ThemeSwitch />
-            <LogOut size={20} className="cursor-pointer" />
           </div>
         </div>
         <div className="p-3 flex items-center">
