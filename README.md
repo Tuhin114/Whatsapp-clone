@@ -13,3 +13,9 @@
 
 - Follow process in the video.
 - Users function with schema.
+
+### User-List-Diaologbox
+
+- To make a group chat
+- All basic codes of the components 
+- Input Image(Group Image)
