@@ -17,5 +17,7 @@
 ### User-List-Diaologbox
 
 - To make a group chat
-- All basic codes of the components 
+- All basic codes of the components
 - Input Image(Group Image)
+- convex conversation and message schema
+
