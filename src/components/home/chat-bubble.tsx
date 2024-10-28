@@ -2,6 +2,7 @@
 import { MessageSeenSvg } from "@/lib/svgs";
 import { IMessage, useConversationStore } from "@/store/chat-store";
 import ChatBubbleAvatar from "./chat-bubble-avatar";
+import DateIndicator from "./date-indicator";
 
 type ChatBubbleProps = {
   message: IMessage;
@@ -9,7 +10,7 @@ type ChatBubbleProps = {
   previousMessage?: IMessage;
 };
 
-const ChatBubble = ({ me, message }: ChatBubbleProps) => {
+const ChatBubble = ({ me, message, previousMessage }: ChatBubbleProps) => {
   const date = new Date(message._creationTime);
   const hour = date.getHours().toString().padStart(2, "0");
   const minute = date.getMinutes().toString().padStart(2, "0");
@@ -25,6 +26,7 @@ const ChatBubble = ({ me, message }: ChatBubbleProps) => {
   if (!fromMe) {
     return (
       <>
+        <DateIndicator message={message} previousMessage={previousMessage} />
         <div className="flex gap-1 w-2/3">
           <ChatBubbleAvatar
             isGroup={isGroup}
@@ -45,6 +47,7 @@ const ChatBubble = ({ me, message }: ChatBubbleProps) => {
 
   return (
     <>
+      <DateIndicator message={message} previousMessage={previousMessage} />
       <div className="flex gap-1 w-2/3 ml-auto">
         <div
           className={`flex  z-20 max-w-fit px-2 pt-1 rounded-md shadow-md ml-auto relative ${bgClass}`}

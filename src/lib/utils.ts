@@ -65,6 +65,7 @@ export function formatDate(date_ms: number) {
   );
 }
 
+//Date wise chat
 export const isSameDay = (timestamp1: number, timestamp2: number): boolean => {
   const date1 = new Date(timestamp1);
   const date2 = new Date(timestamp2);
