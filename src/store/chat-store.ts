@@ -30,6 +30,7 @@ export const useConversationStore = create<ConversationStore>((set) => ({
     set({ selectedConversation: conversation }),
 }));
 
+// Message types
 export interface IMessage {
   _id: string;
   content: string;
