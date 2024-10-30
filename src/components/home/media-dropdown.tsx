@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Dialog, DialogContent, DialogDescription } from "../ui/dialog";
 import {
   DropdownMenu,
@@ -10,6 +11,11 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import ReactPlayer from "react-player";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
+import { sendImage } from "../../../convex/messages";
+import toast from "react-hot-toast";
+import { useConversationStore } from "@/store/chat-store";
 
 const MediaDropdown = () => {
   const imageInput = useRef<HTMLInputElement>(null);
@@ -18,6 +24,66 @@ const MediaDropdown = () => {
   const [selectedVideo, setSelectedVideo] = useState<File | null>(null);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const generateUploadUrl = useMutation(api.conversations.generateUploadUrl);
+  const sendImage = useMutation(api.messages.sendImage);
+  const sendVideo = useMutation(api.messages.sendVideo);
+  const me = useQuery(api.users.getMe);
+
+  const { selectedConversation } = useConversationStore();
+
+  const handleSendImage = async () => {
+    setIsLoading(true);
+    try {
+      // Step 1: Get a short-lived upload URL
+      const postUrl = await generateUploadUrl();
+      // Step 2: POST the file to the URL
+      const result = await fetch(postUrl, {
+        method: "POST",
+        headers: { "Content-Type": selectedImage!.type },
+        body: selectedImage,
+      });
+
+      const { storageId } = await result.json();
+      // Step 3: Save the newly allocated storage id to the database
+      await sendImage({
+        conversation: selectedConversation!._id,
+        imgId: storageId,
+        sender: me!._id,
+      });
+
+      setSelectedImage(null);
+    } catch (err) {
+      toast.error("Failed to send image");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSendVideo = async () => {
+    setIsLoading(true);
+    try {
+      const postUrl = await generateUploadUrl();
+      const result = await fetch(postUrl, {
+        method: "POST",
+        headers: { "Content-Type": selectedVideo!.type },
+        body: selectedVideo,
+      });
+
+      const { storageId } = await result.json();
+
+      await sendVideo({
+        videoId: storageId,
+        conversation: selectedConversation!._id,
+        sender: me!._id,
+      });
+
+      setSelectedVideo(null);
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -43,6 +109,7 @@ const MediaDropdown = () => {
           onClose={() => setSelectedImage(null)}
           selectedImage={selectedImage}
           isLoading={isLoading}
+          handleSendImage={handleSendImage}
         />
       )}
 
@@ -52,6 +119,7 @@ const MediaDropdown = () => {
           onClose={() => setSelectedVideo(null)}
           selectedVideo={selectedVideo}
           isLoading={isLoading}
+          handleSendVideo={handleSendVideo}
         />
       )}
 
@@ -81,6 +149,7 @@ type MediaImageDialogProps = {
   onClose: () => void;
   selectedImage: File;
   isLoading: boolean;
+  handleSendImage: () => void;
 };
 
 const MediaImageDialog = ({
@@ -88,6 +157,7 @@ const MediaImageDialog = ({
   onClose,
   selectedImage,
   isLoading,
+  handleSendImage,
 }: MediaImageDialogProps) => {
   const [renderedImage, setRenderedImage] = useState<string | null>(null);
 
@@ -115,7 +185,11 @@ const MediaImageDialog = ({
               alt="selected image"
             />
           )}
-          <Button className="w-full" disabled={isLoading}>
+          <Button
+            className="w-full"
+            disabled={isLoading}
+            onClick={handleSendImage}
+          >
             {isLoading ? "Sending..." : "Send"}
           </Button>
         </DialogDescription>
@@ -129,6 +203,7 @@ type MediaVideoDialogProps = {
   onClose: () => void;
   selectedVideo: File;
   isLoading: boolean;
+  handleSendVideo: () => void;
 };
 
 const MediaVideoDialog = ({
@@ -136,6 +211,7 @@ const MediaVideoDialog = ({
   onClose,
   selectedVideo,
   isLoading,
+  handleSendVideo,
 }: MediaVideoDialogProps) => {
   const renderedVideo = URL.createObjectURL(
     new Blob([selectedVideo], { type: "video/mp4" })
@@ -155,7 +231,11 @@ const MediaVideoDialog = ({
             <ReactPlayer url={renderedVideo} controls width="100%" />
           )}
         </div>
-        <Button className="w-full" disabled={isLoading}>
+        <Button
+          className="w-full"
+          disabled={isLoading}
+          onClick={handleSendVideo}
+        >
           {isLoading ? "Sending..." : "Send"}
         </Button>
       </DialogContent>
