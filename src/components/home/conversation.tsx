@@ -21,9 +21,9 @@ const Conversation = ({ conversation }: { conversation: any }) => {
   return (
     <>
       <div
-        className={`flex gap-2 items-center p-3 hover:bg-chat-hover cursor-pointer 
-          ${activeBgClass ? "bg-gray-tertiary" : ""}
-          `}
+        className={`flex gap-2 items-center p-3 hover:bg-chat-hover cursor-pointer
+					${activeBgClass ? "bg-gray-tertiary" : ""}
+				`}
         onClick={() => setSelectedConversation(conversation)}
       >
         <Avatar className="border border-gray-900 overflow-visible relative">
@@ -40,10 +40,8 @@ const Conversation = ({ conversation }: { conversation: any }) => {
         </Avatar>
         <div className="w-full">
           <div className="flex items-center">
-            <h3 className="text-xs lg:text-sm font-medium">
-              {conversationName}
-            </h3>
-            <span className="text-[10px] lg:text-xs text-gray-500 ml-auto">
+            <h3 className="text-sm font-medium">{conversationName}</h3>
+            <span className="text-xs text-gray-500 ml-auto">
               {formatDate(
                 lastMessage?._creationTime || conversation._creationTime
               )}
@@ -55,11 +53,9 @@ const Conversation = ({ conversation }: { conversation: any }) => {
             {!lastMessage && "Say Hi!"}
             {lastMessageType === "text" ? (
               lastMessage?.content.length > 30 ? (
-                <span className="text-xs">
-                  {lastMessage?.content.slice(0, 30)}...
-                </span>
+                <span>{lastMessage?.content.slice(0, 30)}...</span>
               ) : (
-                <span className="text-xs">{lastMessage?.content}</span>
+                <span>{lastMessage?.content}</span>
               )
             ) : null}
             {lastMessageType === "image" && <ImageIcon size={16} />}

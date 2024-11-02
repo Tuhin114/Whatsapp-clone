@@ -106,6 +106,7 @@ export const getMyConversations = query({
   },
 });
 
+//Hich out of group
 export const kickUser = mutation({
   args: {
     conversationId: v.id("conversations"),
