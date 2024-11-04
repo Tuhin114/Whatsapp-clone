@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { IMessage, useConversationStore } from "@/store/chat-store";
 import { useMutation } from "convex/react";
 import { Ban, LogOut } from "lucide-react";

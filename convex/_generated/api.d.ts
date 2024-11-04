@@ -17,6 +17,7 @@ import type {
 } from "convex/server";
 import type * as clerk from "../clerk.js";
 import type * as conversations from "../conversations.js";
+import type * as gemini from "../gemini.js";
 import type * as http from "../http.js";
 import type * as messages from "../messages.js";
 import type * as users from "../users.js";
@@ -32,6 +33,7 @@ import type * as users from "../users.js";
 declare const fullApi: ApiFromModules<{
   clerk: typeof clerk;
   conversations: typeof conversations;
+  gemini: typeof gemini;
   http: typeof http;
   messages: typeof messages;
   users: typeof users;
